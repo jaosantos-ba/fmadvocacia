@@ -1,0 +1,5 @@
+.carousel-item img {
+  width: 500px; /* Largura fixa */
+  height: 500px; /* Altura fixa */
+  object-fit: cover; /* Ajusta a imagem para preencher o espaço */
+}
