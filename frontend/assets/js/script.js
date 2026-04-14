@@ -2,6 +2,25 @@ document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("contactForm");
   const status = document.getElementById("formStatus");
   const telefone = document.getElementById("telefone");
+  const header = document.querySelector(".site-header");
+  const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+  const revealItems = document.querySelectorAll(".reveal");
+
+  function updateHeaderShadow() {
+    if (!header) return;
+    header.classList.toggle("scrolled", window.scrollY > 12);
+  }
+
+  function updateActiveSection() {
+    const scrollPos = window.scrollY + 140;
+    navLinks.forEach((link) => {
+      const section = document.querySelector(link.getAttribute("href"));
+      if (!section) return;
+      const top = section.offsetTop;
+      const bottom = top + section.offsetHeight;
+      link.classList.toggle("active", scrollPos >= top && scrollPos < bottom);
+    });
+  }
 
   if (telefone) {
     telefone.addEventListener("input", function (e) {
@@ -24,6 +43,29 @@ document.addEventListener("DOMContentLoaded", function () {
       e.target.value = value;
     });
   }
+
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.14 }
+    );
+
+    revealItems.forEach((item) => observer.observe(item));
+  } else {
+    revealItems.forEach((item) => item.classList.add("visible"));
+  }
+
+  updateHeaderShadow();
+  updateActiveSection();
+  window.addEventListener("scroll", updateHeaderShadow, { passive: true });
+  window.addEventListener("scroll", updateActiveSection, { passive: true });
 
   if (!form) return;
 
@@ -64,14 +106,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const mensagem = document.getElementById("mensagem").value.trim();
     const tel = document.getElementById("telefone").value.trim();
 
-    const texto = `Olá, meu nome é ${nome}.%0A` +
+    const texto =
+      `Olá, meu nome é ${nome}.%0A` +
       `Telefone: ${tel}%0A` +
       `Assunto: ${assunto}%0A` +
       `Mensagem: ${mensagem}`;
 
     status.textContent = "Redirecionando para o WhatsApp...";
 
-    window.open(`https://wa.me/5571993512211?text=${texto}`, "_blank");
+    window.open(`https://wa.me/5571992631016?text=${texto}`, "_blank");
     form.reset();
   });
 });
